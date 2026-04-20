@@ -19,6 +19,12 @@ h1 {
   margin-bottom: 16px;
 }
 
+.vk-line {
+  margin: -8px 0 14px;
+  color: #475569;
+  font-size: 13px;
+}
+
 .card {
   background: #fff;
   border-radius: 14px;

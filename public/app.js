@@ -11,11 +11,30 @@ const logoutBtn = document.getElementById("logout-btn");
 const headmanSection = document.getElementById("headman-section");
 const headmanReport = document.getElementById("headman-report");
 const refreshDayBtn = document.getElementById("refresh-day-btn");
+const vkStatus = document.getElementById("vk-status");
+const vkPlatform = document.getElementById("vk-platform");
 
 let auth = {
   token: localStorage.getItem("token") || "",
   user: JSON.parse(localStorage.getItem("user") || "null")
 };
+
+async function initVkBridge() {
+  const params = new URLSearchParams(window.location.search);
+  vkPlatform.textContent = params.get("vk_platform") || "not passed";
+
+  if (!window.vkBridge) {
+    vkStatus.textContent = "vkBridge не загружен";
+    return;
+  }
+
+  try {
+    await window.vkBridge.send("VKWebAppInit");
+    vkStatus.textContent = "ok";
+  } catch (error) {
+    vkStatus.textContent = `ошибка: ${error && error.message ? error.message : "unknown"}`;
+  }
+}
 
 async function api(path, options = {}) {
   const headers = {
@@ -275,6 +294,8 @@ logoutBtn.addEventListener("click", () => {
 });
 
 async function bootstrap() {
+  await initVkBridge();
+
   if (!auth.token || !auth.user) {
     showLogin();
     return;

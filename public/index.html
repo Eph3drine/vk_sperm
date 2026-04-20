@@ -9,6 +9,10 @@
   <body>
     <main class="container">
       <h1>Учёт посещаемости группы</h1>
+      <p class="vk-line">
+        VK: <span id="vk-status">инициализация...</span> |
+        платформа: <span id="vk-platform">unknown</span>
+      </p>
 
       <section id="auth-section" class="card">
         <h2>Вход</h2>
@@ -56,6 +60,7 @@
       </section>
     </main>
 
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script src="/app.js"></script>
   </body>
 </html>
