@@ -11,8 +11,6 @@ const logoutBtn = document.getElementById("logout-btn");
 const headmanSection = document.getElementById("headman-section");
 const headmanReport = document.getElementById("headman-report");
 const refreshDayBtn = document.getElementById("refresh-day-btn");
-const vkStatus = document.getElementById("vk-status");
-const vkPlatform = document.getElementById("vk-platform");
 
 let auth = {
   token: localStorage.getItem("token") || "",
@@ -20,20 +18,24 @@ let auth = {
 };
 
 async function initVkBridge() {
-  const params = new URLSearchParams(window.location.search);
-  vkPlatform.textContent = params.get("vk_platform") || "not passed";
-
   if (!window.vkBridge) {
-    vkStatus.textContent = "vkBridge не загружен";
     return;
   }
-
   try {
     await window.vkBridge.send("VKWebAppInit");
-    vkStatus.textContent = "ok";
-  } catch (error) {
-    vkStatus.textContent = `ошибка: ${error && error.message ? error.message : "unknown"}`;
+  } catch {
+    /* вне VK или ограничения окружения — приложение всё равно работает */
   }
+}
+
+function roleLabel(role) {
+  if (role === "headman") {
+    return "староста";
+  }
+  if (role === "student") {
+    return "студент";
+  }
+  return role;
 }
 
 async function api(path, options = {}) {
@@ -107,15 +109,14 @@ async function renderLessons() {
   }
 
   const scheduleData = await api(`/api/schedule?date=${date}`);
-  weekLine.textContent = `Неделя: ${
-    scheduleData.weekType === "numerator" ? "числитель" : "знаменатель"
-  }`;
+  weekLine.textContent =
+    scheduleData.weekType === "numerator" ? "Числитель" : "Знаменатель";
 
   const myMarks = await loadMyAttendance(date);
   lessonsBox.innerHTML = "";
 
   if (!scheduleData.lessons.length) {
-    lessonsBox.innerHTML = "<p>На выбранную дату пар нет.</p>";
+    lessonsBox.innerHTML = "<p>В этот день занятий нет.</p>";
     return;
   }
 
@@ -126,10 +127,8 @@ async function renderLessons() {
     const state = myMarks.get(lesson.index);
     const stateText =
       typeof state === "boolean"
-        ? `<span class="${state ? "present" : "absent"}">Текущая отметка: ${
-            state ? "Был" : "Не был"
-          }</span>`
-        : "Пока не отмечено";
+        ? `<span class="${state ? "present" : "absent"}">${state ? "Был" : "Не был"}</span>`
+        : "Не отмечено";
 
     row.innerHTML = `
       <p class="lesson-title">#${lesson.index} ${lesson.subject}</p>
@@ -183,7 +182,7 @@ async function renderHeadmanReport() {
   const lessons = scheduleResult.lessons || [];
 
   if (!lessons.length) {
-    headmanReport.innerHTML = "<p>На выбранную дату пар нет, таблица не требуется.</p>";
+    headmanReport.innerHTML = "<p>В этот день занятий нет.</p>";
     return;
   }
 
@@ -238,7 +237,7 @@ async function renderHeadmanReport() {
 function showApp() {
   authSection.classList.add("hidden");
   appSection.classList.remove("hidden");
-  userLine.textContent = `Пользователь: ${auth.user.fullName} (${auth.user.role})`;
+  userLine.textContent = `${auth.user.fullName} · ${roleLabel(auth.user.role)}`;
   headmanSection.classList.toggle("hidden", auth.user.role !== "headman");
   dateInput.value = dateInput.value || todayISO();
 }

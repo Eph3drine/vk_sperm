@@ -19,10 +19,8 @@ h1 {
   margin-bottom: 16px;
 }
 
-.vk-line {
-  margin: -8px 0 14px;
-  color: #475569;
-  font-size: 13px;
+.date-label {
+  margin-top: 4px;
 }
 
 .card {
@@ -92,11 +90,6 @@ button:disabled {
 
 .hidden {
   display: none;
-}
-
-.hint {
-  color: #6b7280;
-  font-size: 13px;
 }
 
 .lesson-row {

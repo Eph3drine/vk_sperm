@@ -3,35 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VK Attendance Mini App</title>
+    <title>Посещаемость</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     <main class="container">
-      <h1>Учёт посещаемости группы</h1>
-      <p class="vk-line">
-        VK: <span id="vk-status">инициализация...</span> |
-        платформа: <span id="vk-platform">unknown</span>
-      </p>
+      <h1>Посещаемость</h1>
 
       <section id="auth-section" class="card">
         <h2>Вход</h2>
         <form id="login-form">
           <label>
-            ID студента
-            <input id="login-id" type="text" required placeholder="например s001 или headman" />
+            Логин
+            <input id="login-id" type="text" required autocomplete="username" />
           </label>
 
           <label>
             Пароль
-            <input id="login-password" type="password" required />
+            <input id="login-password" type="password" required autocomplete="current-password" />
           </label>
 
           <button type="submit">Войти</button>
         </form>
-        <p class="hint">
-          Тестовые данные: s001/1111, s002/2222, s003/3333, headman/0000
-        </p>
       </section>
 
       <section id="app-section" class="card hidden">
@@ -43,8 +36,8 @@
           <button id="logout-btn" class="secondary">Выйти</button>
         </div>
 
-        <label>
-          Выбери дату
+        <label class="date-label">
+          Дата
           <input id="date-input" type="date" />
         </label>
 
@@ -52,8 +45,8 @@
 
         <div id="headman-section" class="hidden card soft">
           <div class="headman-title-row">
-            <h3>Сводка для старосты: вся группа по выбранной дате</h3>
-            <button id="refresh-day-btn" class="secondary">Обновить</button>
+            <h3>Группа за выбранную дату</h3>
+            <button id="refresh-day-btn" class="secondary" type="button">Обновить</button>
           </div>
           <div id="headman-report"></div>
         </div>
