@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VK Attendance Mini App</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Учёт посещаемости группы</h1>
+
+      <section id="auth-section" class="card">
+        <h2>Вход</h2>
+        <form id="login-form">
+          <label>
+            ID студента
+            <input id="login-id" type="text" required placeholder="например s001 или headman" />
+          </label>
+
+          <label>
+            Пароль
+            <input id="login-password" type="password" required />
+          </label>
+
+          <button type="submit">Войти</button>
+        </form>
+        <p class="hint">
+          Тестовые данные: s001/1111, s002/2222, s003/3333, headman/0000
+        </p>
+      </section>
+
+      <section id="app-section" class="card hidden">
+        <div class="toolbar">
+          <div class="toolbar-info">
+            <p id="user-line"></p>
+            <p id="week-line"></p>
+          </div>
+          <button id="logout-btn" class="secondary">Выйти</button>
+        </div>
+
+        <label>
+          Выбери дату
+          <input id="date-input" type="date" />
+        </label>
+
+        <div id="lessons-box"></div>
+
+        <div id="headman-section" class="hidden card soft">
+          <div class="headman-title-row">
+            <h3>Сводка для старосты: вся группа по выбранной дате</h3>
+            <button id="refresh-day-btn" class="secondary">Обновить</button>
+          </div>
+          <div id="headman-report"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

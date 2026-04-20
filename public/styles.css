@@ -1,0 +1,185 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #eef4ff 0%, #f8fafc 45%);
+  color: #1f2937;
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+h1 {
+  margin-bottom: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(30, 41, 59, 0.08);
+  margin-bottom: 16px;
+}
+
+.soft {
+  background: #f8fbff;
+  border: 1px solid #dbeafe;
+}
+
+form,
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+input,
+button {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 8px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+button:hover {
+  opacity: 0.94;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button.secondary {
+  background: #4b5563;
+}
+
+button:disabled {
+  background: #9ca3af;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.toolbar-info p {
+  margin: 2px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.hint {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.lesson-row {
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+  background: #ffffff;
+}
+
+.lesson-title {
+  margin: 0 0 8px;
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.present {
+  color: #166534;
+}
+
+.absent {
+  color: #991b1b;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: #fff;
+}
+
+th,
+td {
+  border: 1px solid #d1d5db;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background: #eff6ff;
+  font-weight: 600;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.status-pill.ok {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.no {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-pill.empty {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.headman-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+  .toolbar,
+  .headman-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .container {
+    padding: 16px 10px 30px;
+  }
+}
