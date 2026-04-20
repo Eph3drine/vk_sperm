@@ -23,7 +23,6 @@ with open(STUDENTS_PATH, "r", encoding="utf-8") as students_file:
     STUDENTS = json.load(students_file)
 
 STUDENTS_BY_ID = {student["id"]: student for student in STUDENTS}
-TOKEN_STORE = {}
 
 database_path_raw = os.environ.get("DATABASE_PATH", "data/attendance.db")
 if os.path.isabs(database_path_raw):
@@ -32,7 +31,9 @@ else:
     DATABASE_PATH = BASE_DIR / database_path_raw
 DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-app = Flask(__name__, static_folder=str(PUBLIC_DIR), static_url_path="")
+# Префикс /static — чтобы на PythonAnywhere не конфликтовать с маппингом «URL / -> public»
+# и чтобы /api/* всегда шло в WSGI, а не в статику nginx.
+app = Flask(__name__, static_folder=str(PUBLIC_DIR), static_url_path="/static")
 
 
 def get_db():
@@ -54,6 +55,15 @@ def close_connection(exception):  # noqa: ARG001
 def init_db():
     db = sqlite3.connect(DATABASE_PATH)
     try:
+        db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS sessions (
+                token TEXT PRIMARY KEY,
+                payload TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
         db.execute(
             """
             CREATE TABLE IF NOT EXISTS attendance (
@@ -131,7 +141,11 @@ def get_auth_user():
     if not auth_header.startswith("Bearer "):
         return None
     token = auth_header[7:]
-    return TOKEN_STORE.get(token)
+    db = get_db()
+    row = db.execute("SELECT payload FROM sessions WHERE token = ?", (token,)).fetchone()
+    if not row:
+        return None
+    return json.loads(row["payload"])
 
 
 def auth_required():
@@ -152,6 +166,11 @@ def index():
     return send_from_directory(PUBLIC_DIR, "index.html")
 
 
+@app.route("/vk-test.html")
+def vk_test_page():
+    return send_from_directory(PUBLIC_DIR, "vk-test.html")
+
+
 @app.post("/api/login")
 def login():
     payload = request.get_json(silent=True) or {}
@@ -162,7 +181,12 @@ def login():
 
     token = secrets.token_hex(24)
     user_public = public_student(student)
-    TOKEN_STORE[token] = user_public
+    db = get_db()
+    db.execute(
+        "INSERT INTO sessions (token, payload) VALUES (?, ?)",
+        (token, json.dumps(user_public)),
+    )
+    db.commit()
     return jsonify({"token": token, "user": user_public})
 
 
